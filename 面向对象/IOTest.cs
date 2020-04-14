@@ -274,6 +274,8 @@ namespace 面向对象 {
             Console.WriteLine(binaryReader.ReadDouble());   // 输出图书价格
             binaryReader.Close();               // 关闭二进制流
             fileStream.Close();                 // 关闭文件流
+            
+            
         }
 
         public static void IOT() {

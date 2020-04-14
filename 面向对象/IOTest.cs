@@ -150,11 +150,38 @@ namespace 面向对象 {
         // WriteTo                                 将此内存流的整个内容写入另一个流中
 
         // 内存数据流读写
+        void MemoryStreamClass() {
+            // 新建流
+            MemoryStream ms = new MemoryStream();
+            Console.WriteLine(ms.CanRead);  // True，表明内存流可读
+            Console.WriteLine(ms.CanSeek);  // True，表明内存流可查找
+            Console.WriteLine(ms.CanWrite); // True，表明内存流可写
+            Console.WriteLine(ms.Capacity); // 0，表明分配给该流的字节数为零
+
+            // 将字符串 "www.hbsi.edu.cn" 转换为 UTF8 编码的字节数组，赋值给 bytes
+            byte[] bytes = Encoding.UTF8.GetBytes("www.hbsi.edu.cn");
+            // 将 bytes 中所有的内容写入到内存流中，0 代表数组的开始，bytes.Length 代表偏移量
+            ms.Write(bytes, 0, bytes.Length);
+            Console.WriteLine(ms.Capacity); // 256，当前分配给该流的字节为 256
+            Console.WriteLine(ms.Length);   // 15，实际占用 15 字节，对应长度为该字符串的长度
+            Console.WriteLine(ms.Position); // 15，流当前的位置为 15，15 为该流末位的往后一位
+
+            byte[] byte1 = ms.GetBuffer();  // 获取流中的内容
+            string str1 = Encoding.UTF8.GetString(byte1);   // 将读取的内容转换成字符赋值给字符串
+            Console.WriteLine(str1);        // www.hbsi.edu.cn
+
+            // 改变当前流的位置，之前流的位置在末尾，-1 代表向前移动一位，Current 代表当前
+            ms.Seek(-1, SeekOrigin.Current);
+            int i = ms.ReadByte();          // 从流中读取当前字节
+            Console.WriteLine(i);           // 110，110 正好对应 ASCII 中的 n
+
+
+        }
 
 
         public static void IOT() {
             IOTest iot = new IOTest();
-            iot.FileStreamClass();
+            iot.MemoryStreamClass();
         }
     }
 }

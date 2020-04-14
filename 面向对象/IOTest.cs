@@ -178,10 +178,107 @@ namespace 面向对象 {
 
         }
 
+        /// <summary>
+        /// 文本文件读写
+        /// 
+        /// 文件：
+        ///     一些具有永久存储及特定顺序的字节组成的一个有序的、具有名称的集合。
+        ///     在各种介质上（如：可移动磁盘、硬盘、CD 等）存储的集合数据。
+        ///     通常情况下，文件按照树状目录进行组织
+        ///     每个文件都有文件名、文件所在路径、创建时间、访问权限等属性。
+        ///     
+        /// 文件分类：
+        ///     文本文件：完全与字符和与字符的显示格式有关的控制符（如空格、回车符及换行符等）构成。
+        ///               文本文件很容易在不同的操作系统、不同的软件中通用，只要这些系统和软件遵循相同的字符代码标准。
+        ///               文本文件常用 .txt 作为扩展名
+        ///               常见的文本文件扩展名还有：.BAT 和 .HTM
+        ///     二进制文件：非文本文件，就是一些二进制数据。
+        ///                 扩展名为：.COM、.EXE 等程序文件，.BMP(存放图像数据)、.WAV(存放声音数据) 等
+        /// 
+        /// 在处理文件时，会遇到流的问题。
+        /// 什么是流：
+        ///     定义：提供了连续的字节流存储空间，虽然数据实际存储的位置可能不连续，甚至可以分布在多个磁盘上，
+        ///           但我们看到的是封装以后的数据结构，是连续的字节流抽象结构。
+        ///     存储位置：网络中、内存中或者是磁带中。
+        ///     
+        /// 从硬盘中读取文件时，每读一个字节，就会自动流入下一个字节，这个字节只允许你读取一次。
+        /// 在 .net 中，与文件操作有关系的类，在 System.IO 命名空间中
+        /// System.IO 命名空间
+        /// 定义：
+        ///     C# 中对文件和流进行操作时必须要引用的一个命名空间，该命名空间中有很多的类，
+        ///     用于进行数据文件和流的读写操作，这些操作可以同步进行也可以异步进行。
+        ///     注意：要使用 System.IO 命名空间，窗体代码的顶部应加入语句：using System.IO
+        /// 
+        /// 文本文件的读写有 StreamWriter 对象和 StreamReader 对象
+        /// 
+        /// StreamWriter 对象：将数据写入文本文件
+        /// 创建一个 StreamWriter对象 使用 new语句，如：
+        ///     StreamWriter swFile = new StreamWriter("D:\\MyWork.txt");
+        /// 
+        /// StreamWriter 对象常用方法：
+        ///     Write           写入字符串
+        ///     WriteLine       写入一个字符串和一个换行符
+        ///     Close           释放 StreamWriter 对象，并关闭打开的文件
+        ///                     写完文件后，一定要用 Close 调用文件
+        ///                     写文件时，操作系统只是把文件写到了缓冲区里，调用 Close 时，才会把缓冲区里的内容移到硬盘上
+        ///                     
+        /// StreamReader 对象：可以读取文本文件的信息
+        /// 创建一个 StreamReader 对象：指定一个带有路径的文件名。如：
+        ///     StreamReader srFile = new StreamReader("D:\\MyWork.txt");
+        ///     
+        /// StreamReader 对象常用方法：
+        ///     Reade           从文件中读入下一个字符
+        ///     ReadLine        从文件中读入下一行字符
+        ///     Peek            返回文件中的下一个字符，但并不读入该字符
+        /// </summary>
+
+        /// 二进制文件的读写
+        /// BinaryWriter 类和BinaryReader 类，它们可以将一个字符或数字按指定字节写入，也可以一次读取指定个数字节，转换为字符或数字。
+        /// 只有构造了 FileStream 类以后，才能进一步构造 BinaryWriter 和 BinaryReader 对象，以获得更高级的功能。
+        /// 
+        /// BinaryReader 常用方法：
+        ///     ReadBoolean         从当前流中读取 Boolean
+        ///     ReadByte            从当前流中读取下一个字节
+        ///     ReadBytes           从当前流中将 count 个字节读入字节数组
+        ///     ReadChar            从当前流中读取下一个字符
+        ///     ReadDouble          从当前流中读取 8 字节浮点值
+        ///     ReadSingle          从当前流中读取 4 字节浮点值
+        ///     ReadString          从当前流中读取一个字符串
+        ///     
+        /// BinaryWriter 常用方法：
+        ///     Flush()             刷新二进制流
+        ///     Seek()              设置当前流的位置
+        ///     Write(Char)         将字符数组写入当前流
+        ///     Write(Byte)         将一个无符号字节写入当前流
+        ///     Write(Decimal)      将十进制数写入当前流
+        ///     Write(Double)       将 8 字节浮点值写入当前流
+        ///     Write(Short)        将 2 字节有符号整数写入当前流
+        ///     Write(Integer)      将 4 字节有符号整数写入当前流
+        ///     
+        /// 不管是 BinaryReader 还是 BinaryWriter，这些方法都是从当前流读入数据或是写入数据，
+        /// 均会根据读入或是写入数据所占的字节数，修改流的当前位置。
+        /// 
+        void BinaryROrW() {
+            FileStream fileStream = new FileStream(@"C:\Users\y1424\Desktop\my1Text.txt", FileMode.Open, FileAccess.Write);
+            BinaryWriter binaryWriter = new BinaryWriter(fileStream);
+            binaryWriter.Write("C#基础教程");   // 向文件中写入图书C#基础教程的图书名称
+            binaryWriter.Write(49.5);           // 向文件中写入图书的价格，价格为 49.5
+
+            binaryWriter.Flush();               // 清除缓冲区的内容,将缓冲区的内容写入到文件中
+            binaryWriter.Close();               // 关闭二进制流
+            fileStream.Close();                 // 关闭文件流
+
+            fileStream = new FileStream(@"C:\Users\y1424\Desktop\my1Text.txt", FileMode.Open, FileAccess.Read);
+            BinaryReader binaryReader = new BinaryReader(fileStream);
+            Console.WriteLine(binaryReader.ReadString());   // 输出图书名称
+            Console.WriteLine(binaryReader.ReadDouble());   // 输出图书价格
+            binaryReader.Close();               // 关闭二进制流
+            fileStream.Close();                 // 关闭文件流
+        }
 
         public static void IOT() {
             IOTest iot = new IOTest();
-            iot.MemoryStreamClass();
+            iot.BinaryROrW();
         }
     }
 }

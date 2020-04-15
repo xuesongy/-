@@ -64,7 +64,10 @@ namespace 面向对象
             //StringClass.SCla();
 
             // IO
-            IOTest.IOT();
+            //IOTest.IOT();
+
+            // 线程
+            进程和线程.XianChengCaoZuo.ThreadMain();
 
             //SampleClass mC = new SampleClass(11,22);
             //Console.WriteLine("x = {0}, y = {1}", mC.x, mC.y);

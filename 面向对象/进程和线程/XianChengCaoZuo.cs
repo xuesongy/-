@@ -39,6 +39,44 @@ namespace 面向对象.进程和线程 {
          *         
          *      一般将 2、3 步骤合为一句：
          *         Thread workThread = new Thread(new ThreadStart(EntryPointMethod));
+         *         
+         * 线程的优先级：
+         *      可以通过 Thread 类中的 Priority 属性设置
+         *      Priority 属性是一个 ThreadPriority 枚举类型
+         *      其包含 5 个值：
+         *          Highest         可以将 Thread 安排在具有任何其他优先级的线程之前。
+         *          
+         *          AboveNormal     可以将 Thread 安排在具有 Highest 优先级的线程之后，
+         *                          在具有 Normal 优先级的线程之前。
+         *                          
+         *          Normal          可以将 Thread 安排在具有 AboveNormal 优先级的线程之后，
+         *                          在具有 BelowNormal 优先级的线程之前。
+         *                          
+         *          BelowNormal     可以将 Thread 安排在具有 Normal 优先级的线程之后，
+         *                          在具有 Lowest 优先级的线程之前。
+         *                          
+         *          Lowest          可以将 Thread 安排在具有任何其他优先级的线程之后。
+         * 
+         * 线程和人的生老病死一样，线程是一个动态执行的过程，它也有一个从产生到消亡的过程，
+         * 在整个过程中，线程可能处在不同的状态，线程的状态由 Thread 类中的 ThreadState 属性表示。
+         * 
+         * C# 中的线程状态：
+         *      Unstarted           线程尚未开始运行
+         *      Running             线程正在运行
+         *      Suspended           线程已经被挂起
+         *      
+         *      SuspendRequested    正在请求挂起线程，但还未来得及相应
+         *      WaitSleepJoin       由于调用方法 Wait()、Sleep() 或 Join() 而使线程处于阻塞状态
+         *      
+         *      Stopped             线程已经停止
+         *      StoppedRequested    请求停止线程
+         *      
+         *      AbortRequested      已调用了方法 Abort()，但还未收到 ThreadAbortException 异常
+         *      Aborted             线程处于停止状态
+         *      
+         *      Background          线程在后台运行
+         * 
+         * 线程在创建之后就处于上面某一状态中。
          * 
          */
         static void show_MainThread() {
@@ -46,10 +84,76 @@ namespace 面向对象.进程和线程 {
             Thread.CurrentThread.Name = "主线程";
             Console.WriteLine("正在运行的线程是：" + Thread.CurrentThread.Name + ", 状态为：" + Thread.CurrentThread.ThreadState);
             Console.ReadLine();
+            
+        }
+        static void show_ThreadPriority() {
+            // 线程 1
+            Thread ThreadOne = new Thread(delegate () {
+                for (int i = 0; i <= 200000; i++) {
+                    if (i % 200 == 0) {
+                        Console.Write("One");
+                    }
+                }
+            });
+            // 线程 1
+            Thread ThreadTwo = new Thread(delegate () {
+                for (int i = 0; i <= 200000; i++) {
+                    if (i % 200 == 0) {
+                        Console.Write("Two");
+                    }
+                }
+            });
+
+            ThreadOne.Start();
+            ThreadTwo.Start();
+
+            // 主线程
+            for (int i = 0; i <= 200000; i++) {
+                if (i % 200 == 0) {
+                    Console.Write("Three");
+                }
+            }
+        }
+
+        // 修改 show_ThreadPriority 方法，
+        // 分别设置两个子线程的优先级为 AboveNormal 和 BelowNormal
+        // 主线程默认优先级不变
+        static void show_ThreadPriority2() {
+            // 线程 1
+            Thread ThreadOne = new Thread(delegate () {
+                for (int i = 0; i <= 200000; i++) {
+                    if (i % 200 == 0) {
+                        Console.Write("One");
+                    }
+                }
+            });
+            // 线程 1
+            Thread ThreadTwo = new Thread(delegate () {
+                for (int i = 0; i <= 200000; i++) {
+                    if (i % 200 == 0) {
+                        Console.Write("Two");
+                    }
+                }
+            });
+
+            ThreadOne.Priority = ThreadPriority.AboveNormal;    // 线程1 优先级设为 AboveNormal
+            ThreadTwo.Priority = ThreadPriority.BelowNormal;    // 线程 2 优先级设为 BelowNormla
+
+            ThreadOne.Start();
+            ThreadTwo.Start();
+
+            // 主线程，默认优先级为 Normal
+            for (int i = 0; i <= 200000; i++) {
+                if (i % 200 == 0) {
+                    Console.Write("Three");
+                }
+            }
         }
 
         public static void ThreadMain() {
-            show_MainThread();
+            //show_MainThread();
+            //show_ThreadPriority();
+            show_ThreadPriority2();
         }
     }
 }
